@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Classic Bar - Carta de Coctelería de Autor, Vinos y Puntuación Interactiva en Río Cuarto">
+  <title>Classic Bar | Coctelería & Carta Digital</title>
+
+  <!-- Google Fonts: Poppins -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+
+  <!-- TailwindCSS v3 CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            bordo: {
+              DEFAULT: '#3A0D16',
+              dark: '#26080E',
+              light: '#541522'
+            },
+            marron: {
+              DEFAULT: '#241417',
+              dark: '#180C0E',
+              card: '#1F1013'
+            },
+            crema: {
+              DEFAULT: '#F3E6D0',
+              light: '#FAF6F0',
+              muted: '#EADBC4'
+            },
+            beige: {
+              DEFAULT: '#D8C3A5',
+              soft: '#C4AB89'
+            },
+            dorado: {
+              DEFAULT: '#C9A24D',
+              hover: '#DDB763',
+              dark: '#9E7B27',
+              glow: 'rgba(201, 162, 77, 0.4)'
+            }
+          },
+          fontFamily: {
+            sans: ['Poppins', 'system-ui', 'sans-serif']
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    /* ==========================================================================
+       ESTILOS PERSONALIZADOS Y UTILIDADES
+       ========================================================================== */
+    html {
+      scroll-behavior: smooth;
+    }
+
+    /* Utilidad de contraste garantizado para textos sobre banners oscuros/gradientes */
+    .force-text-white {
+      color: #ffffff !important;
+    }
+
+    /* Scrollbar personalizada */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #180C0E;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #C9A24D;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #DDB763;
+    }
+
+    /* Microinteracciones y animaciones */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes scaleModal {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .animate-fade-in {
+      animation: fadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .animate-modal {
+      animation: scaleModal 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    /* Foco accesible visible */
+    button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+      outline: 2px solid #C9A24D;
+      outline-offset: 3px;
+    }
+  </style>
+</head>
+<body class="bg-[#FAF6F0] text-[#241417] dark:bg-[#3A0D16] dark:text-[#F3E6D0] min-h-screen flex flex-col font-sans transition-colors duration-300 overflow-x-hidden">
+
+  <!-- ==========================================================================
+       1. NAVBAR SUPERIOR STICKY & MENÚ RESPONSIVE
+       ========================================================================== -->
+  <header class="sticky top-0 z-40 backdrop-blur-md bg-[#FAF6F0]/90 dark:bg-[#3A0D16]/90 border-b border-black/5 dark:border-[#C9A24D]/20 transition-colors duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 py-3 flex items-center justify-between">
+      
+      <!-- Marca y Monograma "CB" -->
+      <a href="#inicio" onclick="navigateTo('inicio'); return false;" class="flex items-center gap-3 group focus:outline-none" aria-label="Classic Bar - Volver al inicio">
+        <div class="w-10 h-10 rounded-full border-2 border-[#C9A24D] bg-[#241417] text-[#C9A24D] flex items-center justify-center font-bold text-base tracking-wider shadow-md group-hover:scale-105 transition-transform">
+          CB
+        </div>
+        <div class="flex flex-col">
+          <span class="text-xl font-bold tracking-tight text-[#241417] dark:text-[#F3E6D0] leading-none">
+            Classic <span class="text-[#C9A24D]">Bar</span>
+          </span>
+          <span class="text-[10px] uppercase tracking-widest text-[#5C3A41] dark:text-[#D8C3A5] font-medium mt-1">
+            Carta & Coctelería
+          </span>
+        </div>
+      </a>
+
+      <!-- Navegación Desktop (3 Secciones) -->
+      <nav class="hidden md:flex items-center gap-1 bg-black/5 dark:bg-black/25 p-1.5 rounded-full border border-black/5 dark:border-[#C9A24D]/20 shadow-inner" aria-label="Navegación principal">
+        <button type="button" id="nav-inicio" onclick="navigateTo('inicio')" class="nav-link px-5 py-2 text-sm font-semibold rounded-full transition-all duration-200 bg-[#C9A24D] text-[#241417] shadow-sm">
+          Inicio
+        </button>
+        <button type="button" id="nav-catalogo" onclick="navigateTo('catalogo')" class="nav-link px-5 py-2 text-sm font-semibold rounded-full transition-all duration-200 text-[#5C3A41] dark:text-[#D8C3A5] hover:text-[#241417] dark:hover:text-[#F3E6D0]">
+          Catálogo
+        </button>
+        <button type="button" id="nav-formulario" onclick="navigateTo('formulario')" class="nav-link px-5 py-2 text-sm font-semibold rounded-full transition-all duration-200 text-[#5C3A41] dark:text-[#D8C3A5] hover:text-[#241417] dark:hover:text-[#F3E6D0]">
+          Puntuación & Contacto
+        </button>
+      </nav>
+
+      <!-- Acciones Derecha: Conmutador de Modo + Botón Hamburguesa -->
+      <div class="flex items-center gap-2 sm:gap-3">
+        
+        <!-- Botón Alternador Claro / Oscuro -->
+        <button type="button" id="theme-toggle" onclick="toggleTheme()" class="p-2.5 rounded-full bg-black/5 dark:bg-black/30 border border-black/10 dark:border-[#C9A24D]/30 text-[#241417] dark:text-[#F3E6D0] hover:border-[#C9A24D] transition-colors" aria-label="Cambiar entre modo claro y oscuro">
+          <!-- Icono Sol (se muestra en modo oscuro) -->
+          <svg id="theme-sun" class="w-5 h-5 hidden dark:block text-[#C9A24D]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+          </svg>
+          <!-- Icono Luna (se muestra en modo claro) -->
+          <svg id="theme-moon" class="w-5 h-5 block dark:hidden text-[#3A0D16]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+          </svg>
+        </button>
+
+        <!-- Botón Menú Hamburguesa Móvil -->
+        <button type="button" id="mobile-menu-btn" onclick="toggleMobileMenu()" class="md:hidden p-2.5 rounded-full bg-black/5 dark:bg-black/30 border border-black/10 dark:border-[#C9A24D]/30 text-[#241417] dark:text-[#F3E6D0] hover:text-[#C9A24D] transition-colors" aria-expanded="false" aria-controls="mobile-drawer" aria-label="Abrir menú de navegación">
+          <svg id="hamburger-icon" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+          <svg id="close-icon" class="w-6 h-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+
+      </div>
+    </div>
+
+    <!-- Menú Desplegable Móvil -->
+    <div id="mobile-drawer" class="hidden md:hidden border-b border-black/10 dark:border-[#C9A24D]/20 bg-[#FAF6F0] dark:bg-[#26080E] px-4 pt-2 pb-5 space-y-2 animate-fade-in shadow-xl">
+      <button type="button" id="mobile-nav-inicio" onclick="navigateTo('inicio'); toggleMobileMenu();" class="w-full text-left px-4 py-3 rounded-xl text-base font-semibold transition-colors bg-[#C9A24D] text-[#241417]">
+        Inicio
+      </button>
+      <button type="button" id="mobile-nav-catalogo" onclick="navigateTo('catalogo'); toggleMobileMenu();" class="w-full text-left px-4 py-3 rounded-xl text-base font-semibold text-[#5C3A41] dark:text-[#D8C3A5] hover:bg-black/5 dark:hover:bg-white/5 transition-colors">
+        Catálogo de Tarjetas
+      </button>
+      <button type="button" id="mobile-nav-formulario" onclick="navigateTo('formulario'); toggleMobileMenu();" class="w-full text-left px-4 py-3 rounded-xl text-base font-semibold text-[#5C3A41] dark:text-[#D8C3A5] hover:bg-black/5 dark:hover:bg-white/5 transition-colors">
+        Puntuación & Contacto
+      </button>
+    </div>
+  </header>
+
+
+  <!-- ==========================================================================
+       CONTENIDO PRINCIPAL (SPA EN 3 SECCIONES)
+       ========================================================================== -->
+  <main class="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+
+    <!-- ------------------------------------------------------------------------
+         SECCIÓN 1: INICIO (HERO & ATMÓSFERA DEL BAR)
+         ------------------------------------------------------------------------ -->
+    <section id="sec-inicio" class="spa-section animate-fade-in space-y-12">
+      
+      <!-- Hero Banner -->
+      <div class="relative rounded-3xl overflow-hidden bg-gradient-to-br from-[#26080E] via-[#3A0D16] to-[#180C0E] border border-[#C9A24D]/30 p-8 sm:p-12 md:p-16 shadow-2xl text-center md:text-left flex flex-col md:flex-row items-center justify-between gap-8">
+        
+        <!-- Destellos radiales decorativos -->
+        <div class="absolute -top-24 -left-24 w-72 h-72 bg-[#C9A24D]/15 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -bottom-24 -right-24 w-72 h-72 bg-[#A855F7]/10 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="relative z-10 max-w-2xl space-y-6">
+          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#C9A24D]/20 border border-[#C9A24D]/40 text-[#C9A24D] text-xs font-semibold tracking-wide uppercase">
+            <span>🍸</span> Coctelería de Autor & Clásicos • Río Cuarto
+          </div>
+
+          <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold force-text-white tracking-tight leading-tight">
+            La excelencia de un buen trago en el momento perfecto.
+          </h1>
+
+          <p class="text-base sm:text-lg text-[#D8C3A5] leading-relaxed">
+            Bienvenido a <strong>Classic Bar</strong>. Fórmulas históricas, botánicos de origen y una atmósfera nocturna refinada diseñada para disfrutar cada conversación y cada sorbo.
+          </p>
+
+          <div class="pt-2 flex flex-col sm:flex-row items-center gap-4 justify-center md:justify-start">
+            <button type="button" onclick="navigateTo('catalogo')" class="w-full sm:w-auto px-8 py-3.5 rounded-xl font-bold bg-gradient-to-r from-[#C9A24D] to-[#DDB763] text-[#241417] shadow-lg shadow-[#C9A24D]/25 hover:brightness-110 active:scale-95 transition-all duration-200">
+              Explorar la Carta ➔
+            </button>
+            <button type="button" onclick="navigateTo('formulario')" class="w-full sm:w-auto px-7 py-3.5 rounded-xl font-semibold border border-[#C9A24D]/50 text-[#F3E6D0] hover:bg-[#C9A24D]/15 active:scale-95 transition-all duration-200">
+              Calificar un Trago ⭐
+            </button>
+          </div>
+        </div>
+
+        <!-- Showcase Visual Hero -->
+        <div class="relative z-10 w-full max-w-xs sm:max-w-sm">
+          <div class="relative rounded-2xl overflow-hidden border-2 border-[#C9A24D]/40 shadow-2xl group">
+            <img 
+              src="https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&w=600&q=80" 
+              alt="Barra nocturna de Classic Bar con copas y coctelería" 
+              class="w-full h-72 sm:h-80 object-cover group-hover:scale-105 transition-transform duration-700"
+              loading="lazy"
+            >
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-5">
+              <span class="text-xs font-semibold text-[#C9A24D] uppercase tracking-wider">Tradición & Estilo</span>
+              <p class="text-sm font-medium force-text-white">Cada cóctel cuenta una historia.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Bloque de 3 Pilares Informativos -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="p-6 rounded-2xl bg-black/5 dark:bg-[#241417] border border-black/5 dark:border-[#C9A24D]/20 shadow-sm space-y-2">
+          <div class="w-10 h-10 rounded-xl bg-[#C9A24D]/20 text-[#C9A24D] flex items-center justify-center text-xl font-bold">🕒</div>
+          <h3 class="text-lg font-bold text-[#241417] dark:text-[#F3E6D0]">Horario Nocturno</h3>
+          <p class="text-sm text-[#5C3A41] dark:text-[#D8C3A5]">Martes a Domingo de 19:00 a 03:00 hs. Barra abierta con tapeo y música selecta.</p>
+        </div>
+
+        <div class="p-6 rounded-2xl bg-black/5 dark:bg-[#241417] border border-black/5 dark:border-[#C9A24D]/20 shadow-sm space-y-2">
+          <div class="w-10 h-10 rounded-xl bg-[#C9A24D]/20 text-[#C9A24D] flex items-center justify-center text-xl font-bold">🍹</div>
+          <h3 class="text-lg font-bold text-[#241417] dark:text-[#F3E6D0]">Happy Hour 2x1</h3>
+          <p class="text-sm text-[#5C3A41] dark:text-[#D8C3A5]">De 19:00 a 21:00 hs en cócteles destacados señalados en nuestra carta.</p>
+        </div>
+
+        <div class="p-6 rounded-2xl bg-black/5 dark:bg-[#241417] border border-black/5 dark:border-[#C9A24D]/20 shadow-sm space-y-2">
+          <div class="w-10 h-10 rounded-xl bg-[#C9A24D]/20 text-[#C9A24D] flex items-center justify-center text-xl font-bold">🏆</div>
+          <h3 class="text-lg font-bold text-[#241417] dark:text-[#F3E6D0]">Bartenders Certificados</h3>
+          <p class="text-sm text-[#5C3A41] dark:text-[#D8C3A5]">Técnicas internacionales de maceración, hielo cristalino y cristalería de época.</p>
+        </div>
+      </div>
+
+    </section>
+
+
+    <!-- ------------------------------------------------------------------------
+         SECCIÓN 2: CATÁLOGO DE TARJETAS (LA CARTA DEL BAR)
+         ------------------------------------------------------------------------ -->
+    <section id="sec-catalogo" class="spa-section hidden animate-fade-in space-y-8">
+      
+      <!-- Encabezado de la Carta -->
+      <div class="text-center max-w-2xl mx-auto space-y-3">
+        <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight">
+          Nuestra Carta Seleccionada
+        </h2>
+        <p class="text-sm sm:text-base text-[#5C3A41] dark:text-[#D8C3A5]">
+          Descubre 6 creaciones emblemáticas. En computadoras verás 6 tarjetas y en celulares 2 columnas para una fácil comparación.
+        </p>
+      </div>
+
+      <!-- Filtros por Categoría (Glosario) -->
+      <div class="flex items-center justify-center flex-wrap gap-2 pt-2" role="toolbar" aria-label="Filtro de categorías de cócteles">
+        <button type="button" onclick="filterCategory('todos')" class="filter-btn px-4 py-2 text-xs sm:text-sm font-semibold rounded-full border border-[#C9A24D] bg-[#C9A24D] text-[#241417] shadow-sm transition-all" data-category="todos">
+          Todos (6)
+        </button>
+        <button type="button" onclick="filterCategory('clasicos')" class="filter-btn px-4 py-2 text-xs sm:text-sm font-semibold rounded-full border border-black/10 dark:border-[#C9A24D]/30 text-[#5C3A41] dark:text-[#D8C3A5] hover:border-[#C9A24D] transition-all" data-category="clasicos">
+          Tragos Clásicos (3)
+        </button>
+        <button type="button" onclick="filterCategory('2x1')" class="filter-btn px-4 py-2 text-xs sm:text-sm font-semibold rounded-full border border-black/10 dark:border-[#C9A24D]/30 text-[#5C3A41] dark:text-[#D8C3A5] hover:border-[#C9A24D] transition-all" data-category="2x1">
+          Tragos en 2x1 (1)
+        </button>
+        <button type="button" onclick="filterCategory('sin-alcohol')" class="filter-btn px-4 py-2 text-xs sm:text-sm font-semibold rounded-full border border-black/10 dark:border-[#C9A24D]/30 text-[#5C3A41] dark:text-[#D8C3A5] hover:border-[#C9A24D] transition-all" data-category="sin-alcohol">
+          Sin Alcohol (1)
+        </button>
+        <button type="button" onclick="filterCategory('vinos')" class="filter-btn px-4 py-2 text-xs sm:text-sm font-semibold rounded-full border border-black/10 dark:border-[#C9A24D]/30 text-[#5C3A41] dark:text-[#D8C3A5] hover:border-[#C9A24D] transition-all" data-category="vinos">
+          Vinos & Champagnes (1)
+        </button>
+      </div>
+
+      <!-- Grilla Responsiva: 6 Tarjetas en Desktop / 2 Tarjetas Horizontales en Móvil -->
+      <div id="drinks-grid" class="grid grid-cols-2 md:grid-cols-3 gap-3.5 sm:gap-5 md:gap-6">
+
+        <!-- Tarjeta 1: Old Fashioned -->
+        <article class="drink-card group flex flex-col justify-between rounded-2xl overflow-hidden bg-white dark:bg-[#241417] border border-black/10 dark:border-[#C9A24D]/25 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300" data-category="clasicos">
+          <div class="relative overflow-hidden aspect-[4/3] bg-black/10">
+            <img 
+              src="https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&w=500&q=80" 
+              alt="Vaso Old Fashioned con hielo cristalino y piel de naranja" 
+              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              loading="lazy"
+            >
+            <span class="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-wider bg-black/75 force-text-white backdrop-blur-sm border border-white/20">
+              Clásico
+            </span>
+          </div>
+          <div class="p-3.5 sm:p-5 flex-1 flex flex-col justify-between space-y-3">
+            <div>
+              <div class="flex items-start justify-between gap-1">
+                <h3 class="font-bold text-sm sm:text-base text-[#241417] dark:text-[#F3E6D0] leading-snug">Old Fashioned</h3>
+                <span class="font-extrabold text-sm sm:text-base text-[#C9A24D] whitespace-nowrap">$4.800</span>
+              </div>
+              <p class="text-xs text-[#5C3A41] dark:text-[#D8C3A5] mt-1.5 line-clamp-2">
+                Bourbon añejado en roble, bitter Angostura, azúcar morena y piel de naranja flameada.
+              </p>
+            </div>
+            <button type="button" onclick="openDrinkModal('old-fashioned')" class="w-full py-2 px-3 rounded-lg text-xs sm:text-sm font-semibold border border-[#C9A24D] text-[#C9A24D] hover:bg-[#C9A24D] hover:text-[#241417] active:scale-95 transition-all flex items-center justify-center gap-1.5">
+              <span>Ver detalles</span> ➔
+            </button>
+          </div>
+        </article>
+
+        <!-- Tarjeta 2: Negroni Clásico -->
+        <article class="drink-card group flex flex-col justify-between rounded-2xl overflow-hidden bg-white dark:bg-[#241417] border border-black/10 dark:border-[#C9A24D]/25 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300" data-category="clasicos">
+          <div class="relative overflow-hidden aspect-[4/3] bg-black/10">
+            <img 
+              src="https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&w=500&q=80" 
+              alt="Cóctel Negroni de color rubí con rodaja de naranja fresca" 
+              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              loading="lazy"
+            >
+            <span class="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-wider bg-black/75 force-text-white backdrop-blur-sm border border-white/20">
+              Clásico
+            </span>
+          </div>
+          <div class="p-3.5 sm:p-5 flex-1 flex flex-col justify-between space-y-3">
+            <div>
+              <div class="flex items-start justify-between gap-1">
+                <h3 class="font-bold text-sm sm:text-base text-[#241417] dark:text-[#F3E6D0] leading-snug">Negroni Clásico</h3>
+                <span class="font-extrabold text-sm sm:text-base text-[#C9A24D] whitespace-nowrap">$4.500</span>
+              </div>
+              <p class="text-xs text-[#5C3A41] dark:text-[#D8C3A5] mt-1.5 line-clamp-2">
+                Partes iguales de Gin London Dry, Vermut Rosso dulce y Campari con hielo tallado.
+              </p>
+            </div>
+            <button type="button" onclick="openDrinkModal('negroni')" class="w-full py-2 px-3 rounded-lg text-xs sm:text-sm font-semibold border border-[#C9A24D] text-[#C9A24D] hover:bg-[#C9A24D] hover:text-[#241417] active:scale-95 transition-all flex items-center justify-center gap-1.5">
+              <span>Ver detalles</span> ➔
+            </button>
+          </div>
+        </article>
+
+        <!-- Tarjeta 3: Mojito Frutos Rojos (2x1) -->
+        <article class="drink-card group flex flex-col justify-between rounded-2xl overflow-hidden bg-white dark:bg-[#241417] border border-black/10 dark:border-[#C9A24D]/25 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 ring-2 ring-[#C9A24D]/40" data-category="2x1">
+          <div class="relative overflow-hidden aspect-[4/3] bg-black/10">
+            <img 
+              src="https://images.unsplash.com/photo-1556881286-fc6915169721?auto=format&fit=crop&w=500&q=80" 
+              alt="Mojito con moras, frambuesas y hojas de menta fresca" 
+              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              loading="lazy"
+            >
+            <span class="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-wider bg-[#C9A24D] text-[#241417] shadow-sm">
+              2x1 Promo
+            </span>
+          </div>
+          <div class="p-3.5 sm:p-5 flex-1 flex flex-col justify-between space-y-3">
+            <div>
+              <div class="flex items-start justify-between gap-1">
+                <h3 class="font-bold text-sm sm:text-base text-[#241417] dark:text-[#F3E6D0] leading-snug">Mojito Berries</h3>
+                <span class="font-extrabold text-sm sm:text-base text-[#C9A24D] whitespace-nowrap">$4.200</span>
+              </div>
+              <p class="text-xs text-[#5C3A41] dark:text-[#D8C3A5] mt-1.5 line-clamp-2">
+                Ron blanco, moras silvestres, frambuesas, hojas de menta, jugo de lima y soda fría.
+              </p>
+            </div>
+            <button type="button" onclick="openDrinkModal('mojito')" class="w-full py-2 px-3 rounded-lg text-xs sm:text-sm font-semibold border border-[#C9A24D] text-[#C9A24D] hover:bg-[#C9A24D] hover:text-[#241417] active:scale-95 transition-all flex items-center justify-center gap-1.5">
+              <span>Ver detalles</span> ➔
+            </button>
+          </div>
+        </article>
+
+        <!-- Tarjeta 4: Dry Martini -->
+        <article class="drink-card group flex flex-col justify-between rounded-2xl overflow-hidden bg-white dark:bg-[#241417] border border-black/10 dark:border-[#C9A24D]/25 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300" data-category="clasicos">
+          <div class="relative overflow-hidden aspect-[4/3] bg-black/10">
+            <img 
+              src="https://images.unsplash.com/photo-1575023782549-62ca0d244b39?auto=format&fit=crop&w=500&q=80" 
+              alt="Copa cónica de Dry Martini con aceituna verde" 
+              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              loading="lazy"
+            >
+            <span class="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-wider bg-black/75 force-text-white backdrop-blur-sm border border-white/20">
+              Clásico
+            </span>
+          </div>
+          <div class="p-3.5 sm:p-5 flex-1 flex flex-col justify-between space-y-3">
+            <div>
+              <div class="flex items-start justify-between gap-1">
+                <h3 class="font-bold text-sm sm:text-base text-[#241417] dark:text-[#F3E6D0] leading-snug">Dry Martini</h3>
+                <span class="font-extrabold text-sm sm:text-base text-[#C9A24D] whitespace-nowrap">$5.200</span>
+              </div>
+              <p class="text-xs text-[#5C3A41] dark:text-[#D8C3A5] mt-1.5 line-clamp-2">
+                Gin Premium frío, perfume de Vermut seco francés y brocheta de aceitunas sevillanas.
+              </p>
+            </div>
+            <button type="button" onclick="openDrinkModal('martini')" class="w-full py-2 px-3 rounded-lg text-xs sm:text-sm font-semibold border border-[#C9A24D] text-[#C9A24D] hover:bg-[#C9A24D] hover:text-[#241417] active:scale-95 transition-all flex items-center justify-center gap-1.5">
+              <span>Ver detalles</span> ➔
+            </button>
+          </div>
+        </article>
+
+        <!-- Tarjeta 5: Mocktail Citrus (Sin Alcohol) -->
+        <article class="drink-card group flex flex-col justify-between rounded-2xl overflow-hidden bg-white dark:bg-[#241417] border border-black/10 dark:border-[#C9A24D]/25 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300" data-category="sin-alcohol">
+          <div class="relative overflow-hidden aspect-[4/3] bg-black/10">
+            <img 
+              src="https://images.unsplash.com/photo-1536935338788-846bb9981813?auto=format&fit=crop&w=500&q=80" 
+              alt="Mocktail sin alcohol con cítricos, tónica y romero" 
+              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              loading="lazy"
+            >
+            <span class="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-wider bg-emerald-700 force-text-white">
+              0% Alcohol
+            </span>
+          </div>
+          <div class="p-3.5 sm:p-5 flex-1 flex flex-col justify-between space-y-3">
+            <div>
+              <div class="flex items-start justify-between gap-1">
+                <h3 class="font-bold text-sm sm:text-base text-[#241417] dark:text-[#F3E6D0] leading-snug">Citrus Paradise</h3>
+                <span class="font-extrabold text-sm sm:text-base text-[#C9A24D] whitespace-nowrap">$3.400</span>
+              </div>
+              <p class="text-xs text-[#5C3A41] dark:text-[#D8C3A5] mt-1.5 line-clamp-2">
+                Pomelo rosado natural, maracuyá, tónica aromática y ramillete de romero quemado.
+              </p>
+            </div>
+            <button type="button" onclick="openDrinkModal('citrus')" class="w-full py-2 px-3 rounded-lg text-xs sm:text-sm font-semibold border border-[#C9A24D] text-[#C9A24D] hover:bg-[#C9A24D] hover:text-[#241417] active:scale-95 transition-all flex items-center justify-center gap-1.5">
+              <span>Ver detalles</span> ➔
+            </button>
+          </div>
+        </article>
+
+        <!-- Tarjeta 6: Malbec Reserva Copa -->
+        <article class="drink-card group flex flex-col justify-between rounded-2xl overflow-hidden bg-white dark:bg-[#241417] border border-black/10 dark:border-[#C9A24D]/25 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300" data-category="vinos">
+          <div class="relative overflow-hidden aspect-[4/3] bg-black/10">
+            <img 
+              src="https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&w=500&q=80" 
+              alt="Copa de vino tinto Malbec en ambiente de bar cálido" 
+              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              loading="lazy"
+            >
+            <span class="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-wider bg-red-900 force-text-white">
+              Vino
+            </span>
+          </div>
+          <div class="p-3.5 sm:p-5 flex-1 flex flex-col justify-between space-y-3">
+            <div>
+              <div class="flex items-start justify-between gap-1">
+                <h3 class="font-bold text-sm sm:text-base text-[#241417] dark:text-[#F3E6D0] leading-snug">Malbec Reserva</h3>
+                <span class="font-extrabold text-sm sm:text-base text-[#C9A24D] whitespace-nowrap">$4.900</span>
+              </div>
+              <p class="text-xs text-[#5C3A41] dark:text-[#D8C3A5] mt-1.5 line-clamp-2">
+                Copa de vino mendocino con notas a ciruelas maduras, cacao, roble francés y vainilla.
+              </p>
+            </div>
+            <button type="button" onclick="openDrinkModal('malbec')" class="w-full py-2 px-3 rounded-lg text-xs sm:text-sm font-semibold border border-[#C9A24D] text-[#C9A24D] hover:bg-[#C9A24D] hover:text-[#241417] active:scale-95 transition-all flex items-center justify-center gap-1.5">
+              <span>Ver detalles</span> ➔
+            </button>
+          </div>
+        </article>
+
+      </div>
+
+      <!-- Estado Vacío (Empty State) para filtros sin resultados -->
+      <div id="empty-state" class="hidden text-center py-16 px-4 rounded-2xl bg-black/5 dark:bg-[#241417] border border-black/5 dark:border-[#C9A24D]/20 space-y-3">
+        <div class="text-4xl">🍹</div>
+        <h3 class="text-lg font-bold text-[#241417] dark:text-[#F3E6D0]">No encontramos cócteles en esta categoría</h3>
+        <p class="text-sm text-[#5C3A41] dark:text-[#D8C3A5]">Intenta seleccionar otra categoría o restablece el filtro.</p>
+        <button type="button" onclick="filterCategory('todos')" class="mt-2 px-5 py-2 rounded-full text-xs font-bold bg-[#C9A24D] text-[#241417] hover:brightness-110">
+          Mostrar Todos los Cócteles
+        </button>
+      </div>
+
+    </section>
+
+
+    <!-- ------------------------------------------------------------------------
+         SECCIÓN 3: FORMULARIO DE CONTACTO & PUNTUACIÓN
+         ------------------------------------------------------------------------ -->
+    <section id="sec-formulario" class="spa-section hidden animate-fade-in space-y-8 max-w-2xl mx-auto">
+      
+      <!-- Encabezado del Formulario -->
+      <div class="text-center space-y-3">
+        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#C9A24D]/15 text-[#C9A24D] text-xs font-semibold">
+          <span>⭐</span> Tu opinión cuenta
+        </div>
+        <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight">
+          Puntuación & Recomendaciones
+        </h2>
+        <p class="text-sm sm:text-base text-[#5C3A41] dark:text-[#D8C3A5]">
+          Elige un trago, asígnale un puntaje del 1 al 10 y cuéntanos tus preferencias de preparación (ej: mucha coca, mucho limón).
+        </p>
+      </div>
+
+      <!-- Contenedor del Formulario -->
+      <div class="bg-white dark:bg-[#241417] border border-black/10 dark:border-[#C9A24D]/30 rounded-3xl p-6 sm:p-8 shadow-xl space-y-6">
+        
+        <!-- Cartel Verde de Éxito (Success State) -->
+        <div id="form-success-banner" class="hidden p-4 rounded-2xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-800 dark:text-emerald-300 space-y-1 animate-fade-in" role="alert">
+          <div class="flex items-center gap-2 font-bold text-sm sm:text-base">
+            <svg class="w-5 h-5 text-emerald-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+            </svg>
+            <span>¡Muchas gracias por tu recomendación!</span>
+          </div>
+          <p class="text-xs sm:text-sm pl-7 text-emerald-700 dark:text-emerald-200">
+            Nuestros bartenders han recibido tu feedback para preparar tu próximo cóctel a la perfección.
+          </p>
+        </div>
+
+        <form id="rating-form" onsubmit="handleFormSubmit(event)" class="space-y-5" novalidate>
+          
+          <!-- 1. Buscador / Selector de Trago -->
+          <div class="space-y-1.5">
+            <label for="form-drink" class="block text-xs sm:text-sm font-semibold text-[#241417] dark:text-[#F3E6D0]">
+              1. Selecciona el Cóctel o Bebida <span class="text-red-500">*</span>
+            </label>
+            <div class="relative">
+              <select id="form-drink" required class="w-full px-4 py-3 rounded-xl bg-[#FAF6F0] dark:bg-[#180C0E] border border-black/15 dark:border-[#C9A24D]/40 text-[#241417] dark:text-[#F3E6D0] text-sm appearance-none cursor-pointer focus:border-[#C9A24D] transition-colors">
+                <option value="" disabled selected>-- Elige un trago de la carta --</option>
+                <option value="Old Fashioned">Old Fashioned ($4.800)</option>
+                <option value="Negroni Clásico">Negroni Clásico ($4.500)</option>
+                <option value="Mojito Frutos Rojos">Mojito Frutos Rojos (2x1 - $4.200)</option>
+                <option value="Dry Martini">Dry Martini ($5.200)</option>
+                <option value="Mocktail Citrus Paradise">Mocktail Citrus Paradise (Sin alcohol - $3.400)</option>
+                <option value="Malbec Gran Reserva">Malbec Gran Reserva Copa ($4.900)</option>
+              </select>
+              <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-[#C9A24D]">
+                ▼
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. Puntuación (1 al 10) -->
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <label class="block text-xs sm:text-sm font-semibold text-[#241417] dark:text-[#F3E6D0]">
+                2. Puntaje del Trago (1 al 10) <span class="text-red-500">*</span>
+              </label>
+              <span id="score-display" class="text-xs font-bold text-[#C9A24D]">Selecciona: 10/10</span>
+            </div>
+            
+            <!-- Selector numérico táctil -->
+            <div class="grid grid-cols-5 sm:grid-cols-10 gap-1.5" role="radiogroup" aria-label="Escala del 1 al 10">
+              <button type="button" onclick="selectScore(1)" class="score-btn py-2.5 rounded-lg text-xs font-bold border border-black/15 dark:border-[#C9A24D]/30 text-[#5C3A41] dark:text-[#D8C3A5] hover:border-[#C9A24D] transition-colors" data-val="1">1</button>
+              <button type="button" onclick="selectScore(2)" class="score-btn py-2.5 rounded-lg text-xs font-bold border border-black/15 dark:border-[#C9A24D]/30 text-[#5C3A41] dark:text-[#D8C3A5] hover:border-[#C9A24D] transition-colors" data-val="2">2</button>
+              <button type="button" onclick="selectScore(3)" class="score-btn py-2.5 rounded-lg text-xs font-bold border border-black/15 dark:border-[#C9A24D]/30 text-[#5C3A41] dark:text-[#D8C3A5] hover:border-[#C9A24D] transition-colors" data-val="3">3</button>
+              <button type="button" onclick="selectScore(4)" class="score-btn py-2.5 rounded-lg text-xs font-bold border border-black/15 dark:border-[#C9A24D]/30 text-[#5C3A41] dark:text-[#D8C3A5] hover:border-[#C9A24D] transition-colors" data-val="4">4</button>
+              <button type="button" onclick="selectScore(5)" class="score-btn py-2.5 rounded-lg text-xs font-bold border border-black/15 dark:border-[#C9A24D]/30 text-[#5C3A41] dark:text-[#D8C3A5] hover:border-[#C9A24D] transition-colors" data-val="5">5</button>
+              <button type="button" onclick="selectScore(6)" class="score-btn py-2.5 rounded-lg text-xs font-bold border border-black/15 dark:border-[#C9A24D]/30 text-[#5C3A41] dark:text-[#D8C3A5] hover:border-[#C9A24D] transition-colors" data-val="6">6</button>
+              <button type="button" onclick="selectScore(7)" class="score-btn py-2.5 rounded-lg text-xs font-bold border border-black/15 dark:border-[#C9A24D]/30 text-[#5C3A41] dark:text-[#D8C3A5] hover:border-[#C9A24D] transition-colors" data-val="7">7</button>
+              <button type="button" onclick="selectScore(8)" class="score-btn py-2.5 rounded-lg text-xs font-bold border border-black/15 dark:border-[#C9A24D]/30 text-[#5C3A41] dark:text-[#D8C3A5] hover:border-[#C9A24D] transition-colors" data-val="8">8</button>
+              <button type="button" onclick="selectScore(9)" class="score-btn py-2.5 rounded-lg text-xs font-bold border border-black/15 dark:border-[#C9A24D]/30 text-[#5C3A41] dark:text-[#D8C3A5] hover:border-[#C9A24D] transition-colors" data-val="9">9</button>
+              <button type="button" onclick="selectScore(10)" class="score-btn py-2.5 rounded-lg text-xs font-bold border border-[#C9A24D] bg-[#C9A24D] text-[#241417] shadow-sm transition-colors" data-val="10">10</button>
+            </div>
+            <input type="hidden" id="form-score-value" value="10">
+          </div>
+
+          <!-- 3. Campo de Recomendaciones Personalizadas -->
+          <div class="space-y-1.5">
+            <label for="form-notes" class="block text-xs sm:text-sm font-semibold text-[#241417] dark:text-[#F3E6D0]">
+              3. Recomendaciones o Notas de Preparación <span class="text-xs text-[#C9A24D] font-normal">(opcional)</span>
+            </label>
+            <textarea 
+              id="form-notes" 
+              rows="3" 
+              placeholder="Ej: Mucha coca, poco hielo, rodaja extra de limón, más bitter..."
+              class="w-full px-4 py-3 rounded-xl bg-[#FAF6F0] dark:bg-[#180C0E] border border-black/15 dark:border-[#C9A24D]/40 text-[#241417] dark:text-[#F3E6D0] text-sm focus:border-[#C9A24D] transition-colors placeholder:text-[#5C3A41]/60 dark:placeholder:text-[#D8C3A5]/40 resize-none"
+            ></textarea>
+          </div>
+
+          <!-- 4. Nombre o Mesa (Opcional) -->
+          <div class="space-y-1.5">
+            <label for="form-name" class="block text-xs sm:text-sm font-semibold text-[#241417] dark:text-[#F3E6D0]">
+              4. Tu Nombre o Número de Mesa <span class="text-xs text-[#C9A24D] font-normal">(opcional)</span>
+            </label>
+            <input 
+              type="text" 
+              id="form-name" 
+              placeholder="Ej: Sofía - Mesa 4"
+              class="w-full px-4 py-3 rounded-xl bg-[#FAF6F0] dark:bg-[#180C0E] border border-black/15 dark:border-[#C9A24D]/40 text-[#241417] dark:text-[#F3E6D0] text-sm focus:border-[#C9A24D] transition-colors placeholder:text-[#5C3A41]/60 dark:placeholder:text-[#D8C3A5]/40"
+            >
+          </div>
+
+          <!-- Mensaje de Validación de Error (Error State) -->
+          <div id="form-error-msg" class="hidden text-xs text-red-500 font-semibold flex items-center gap-1.5" role="alert">
+            <span>⚠️</span> Por favor selecciona un trago de la lista antes de enviar.
+          </div>
+
+          <!-- Botón de Envío con Estado Verde y Tilde -->
+          <div class="pt-2 flex items-center gap-3">
+            <button 
+              type="submit" 
+              id="btn-submit" 
+              class="flex-1 py-3.5 px-6 rounded-xl font-bold text-sm sm:text-base text-[#241417] bg-gradient-to-r from-[#C9A24D] to-[#DDB763] hover:brightness-110 active:scale-98 shadow-lg shadow-[#C9A24D]/25 transition-all duration-300 flex items-center justify-center gap-2"
+            >
+              <span id="btn-submit-text">Enviar Calificación</span>
+            </button>
+            
+            <!-- Tilde animado a la derecha, separado del botón según especificación -->
+            <div id="submit-checkmark" class="hidden w-10 h-10 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold text-lg shadow-md animate-fade-in shrink-0" aria-label="Calificación enviada correctamente">
+              ✓
+            </div>
+          </div>
+
+        </form>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <!-- ==========================================================================
+       MODAL INTERACTIVO DE DETALLES DEL CÓCTEL
+       ========================================================================== -->
+  <div id="drink-modal" class="fixed inset-0 z-50 hidden bg-black/75 backdrop-blur-sm flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    
+    <!-- Contenedor del Modal -->
+    <div class="relative w-full max-w-lg bg-[#FAF6F0] dark:bg-[#241417] border border-black/10 dark:border-[#C9A24D]/40 rounded-3xl overflow-hidden shadow-2xl animate-modal flex flex-col max-h-[90vh]">
+      
+      <!-- Botón de Cerrar (X) -->
+      <button type="button" onclick="closeDrinkModal()" class="absolute top-4 right-4 z-10 w-9 h-9 rounded-full bg-black/60 force-text-white hover:bg-black/80 flex items-center justify-center transition-colors shadow-md" aria-label="Cerrar detalles">
+        ✕
+      </button>
+
+      <!-- Imagen Superior del Modal -->
+      <div class="relative h-48 sm:h-56 w-full bg-black/20 shrink-0">
+        <img id="modal-img" src="" alt="" class="w-full h-full object-cover">
+        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+        <div class="absolute bottom-3 left-4 right-4 flex items-end justify-between">
+          <div>
+            <span id="modal-badge" class="px-2.5 py-0.5 rounded-full text-xs font-bold uppercase tracking-wider bg-[#C9A24D] text-[#241417]"></span>
+            <h3 id="modal-title" class="text-xl sm:text-2xl font-bold force-text-white mt-1"></h3>
+          </div>
+          <span id="modal-price" class="text-xl font-extrabold text-[#C9A24D]"></span>
+        </div>
+      </div>
+
+      <!-- Cuerpo con Detalles del Trago -->
+      <div class="p-5 sm:p-6 overflow-y-auto space-y-4 text-sm">
+        
+        <div>
+          <h4 class="font-bold text-xs uppercase tracking-wider text-[#C9A24D]">Descripción & Perfil</h4>
+          <p id="modal-desc" class="text-[#5C3A41] dark:text-[#D8C3A5] mt-1 leading-relaxed"></p>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3 p-3.5 rounded-xl bg-black/5 dark:bg-black/30 border border-black/5 dark:border-[#C9A24D]/20">
+          <div>
+            <span class="text-[11px] font-semibold text-[#5C3A41] dark:text-[#D8C3A5] uppercase">Cristalería</span>
+            <p id="modal-glass" class="font-bold text-[#241417] dark:text-[#F3E6D0] mt-0.5"></p>
+          </div>
+          <div>
+            <span class="text-[11px] font-semibold text-[#5C3A41] dark:text-[#D8C3A5] uppercase">Graduación</span>
+            <p id="modal-alcohol" class="font-bold text-[#241417] dark:text-[#F3E6D0] mt-0.5"></p>
+          </div>
+        </div>
+
+        <div>
+          <h4 class="font-bold text-xs uppercase tracking-wider text-[#C9A24D]">Ingredientes Principales</h4>
+          <ul id="modal-ingredients" class="mt-2 space-y-1 text-xs sm:text-sm text-[#5C3A41] dark:text-[#D8C3A5] list-disc list-inside"></ul>
+        </div>
+
+        <div>
+          <h4 class="font-bold text-xs uppercase tracking-wider text-[#C9A24D]">Notas del Bartender</h4>
+          <p id="modal-notes" class="text-xs text-[#5C3A41] dark:text-[#D8C3A5] mt-1 italic"></p>
+        </div>
+
+      </div>
+
+      <!-- Pie del Modal con Acción de Calificar -->
+      <div class="p-4 bg-black/5 dark:bg-black/40 border-t border-black/10 dark:border-[#C9A24D]/20 flex items-center justify-between gap-3 shrink-0">
+        <button type="button" onclick="closeDrinkModal()" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold border border-black/20 dark:border-white/20 text-[#5C3A41] dark:text-[#D8C3A5] hover:bg-black/5 dark:hover:bg-white/5 transition-colors">
+          Cerrar
+        </button>
+        <button type="button" id="modal-rate-btn" onclick="rateFromModal()" class="px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-[#C9A24D] text-[#241417] hover:brightness-110 active:scale-95 transition-all flex items-center gap-1.5">
+          <span>Calificar este trago</span> ⭐
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ==========================================================================
+       PIE DE PÁGINA (FOOTER)
+       ========================================================================== -->
+  <footer class="mt-auto border-t border-black/10 dark:border-[#C9A24D]/20 bg-[#FAF6F0] dark:bg-[#180C0E] py-8 text-center text-xs text-[#5C3A41] dark:text-[#D8C3A5] transition-colors duration-300">
+    <div class="max-w-7xl mx-auto px-4 space-y-3">
+      <div class="flex items-center justify-center gap-2">
+        <div class="w-6 h-6 rounded-full border border-[#C9A24D] bg-[#241417] text-[#C9A24D] flex items-center justify-center font-bold text-[10px]">CB</div>
+        <span class="font-bold text-sm text-[#241417] dark:text-[#F3E6D0]">Classic Bar</span>
+      </div>
+      <p>Coctelería de Autor, Clásicos Internacionales & Vinos Selectos • Río Cuarto, Córdoba.</p>
+      <p class="text-[11px] text-[#5C3A41]/70 dark:text-[#D8C3A5]/60">
+        Diseñado bajo la metodología Spec-Driven Development (Gentle AI) con HTML5 y TailwindCSS v3.
+      </p>
+    </div>
+  </footer>
+
+
+  <!-- ==========================================================================
+       JAVASCRIPT MODULAR Y CONTROLADOR DE LA SPA
+       ========================================================================== -->
+  <script>
+    // --------------------------------------------------------------------------
+    // BASE DE DATOS LOCAL DE CÓCTELES (Para Modales y Catálogo)
+    // --------------------------------------------------------------------------
+    const DRINKS_DATA = {
+      'old-fashioned': {
+        name: 'Old Fashioned',
+        price: '$4.800',
+        badge: 'Clásico',
+        category: 'clasicos',
+        image: 'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&w=700&q=80',
+        glass: 'Vaso Old Fashioned (Lowball)',
+        alcohol: '32° GL aprox.',
+        desc: 'El rey indiscutido de la coctelería clásica. Creado en Louisville a fines del siglo XIX, resalta la madera y dulzura del bourbon con el amargor aromático de la angostura.',
+        ingredients: [
+          '60 ml Bourbon Whiskey americano',
+          '3 dashes Bitter Angostura tradicional',
+          '1 terrón de azúcar morena o 10 ml almíbar simple',
+          'Cubo de hielo tallado artesanal',
+          'Piel de naranja flameada'
+        ],
+        notes: 'Remover suavemente con cuchara de bar durante 30 segundos para lograr la dilución y temperatura ideales sin agitar.'
+      },
+      'negroni': {
+        name: 'Negroni Clásico',
+        price: '$4.500',
+        badge: 'Clásico',
+        category: 'clasicos',
+        image: 'https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&w=700&q=80',
+        glass: 'Vaso Tumbler Corto con Hielo Tallado',
+        alcohol: '28° GL aprox.',
+        desc: 'Nacido en Florencia en 1919 a pedido del Conde Camillo Negroni. La perfecta trinidad entre el carácter botánico del gin, la profundidad del vermut rosso y el amargo inconfundible del Campari.',
+        ingredients: [
+          '30 ml Gin London Dry',
+          '30 ml Campari italiano',
+          '30 ml Vermut Rosso dulce',
+          'Media rodaja de naranja fresca'
+        ],
+        notes: 'Equilibrio seco y herbáceo perfecto para abrir el apetito en las primeras horas de la noche.'
+      },
+      'mojito': {
+        name: 'Mojito Frutos Rojos',
+        price: '$4.200 (2x1 Promo)',
+        badge: '2x1 Promo',
+        category: '2x1',
+        image: 'https://images.unsplash.com/photo-1556881286-fc6915169721?auto=format&fit=crop&w=700&q=80',
+        glass: 'Vaso Highball Largo',
+        alcohol: '14° GL aprox.',
+        desc: 'Reinterpretación moderna del clásico cubano infusionada con un coulis artesanal de moras y frambuesas silvestres de estación.',
+        ingredients: [
+          '50 ml Ron blanco caribeño',
+          '30 ml Coulis de frutos rojos naturales',
+          '8 a 10 hojas de menta fresca',
+          '20 ml Jugo de lima recién exprimido',
+          'Hielo picado y golpe de soda'
+        ],
+        notes: 'Aroma fresco y vibrante con notas ácidas y dulces. Incluido en nuestra promoción de Happy Hour 2x1 hasta las 21:00 hs.'
+      },
+      'martini': {
+        name: 'Dry Martini',
+        price: '$5.200',
+        badge: 'Clásico',
+        category: 'clasicos',
+        image: 'https://images.unsplash.com/photo-1575023782549-62ca0d244b39?auto=format&fit=crop&w=700&q=80',
+        glass: 'Copa Cocktelería Martini Clásica',
+        alcohol: '35° GL aprox.',
+        desc: 'La máxima expresión de elegancia en una copa. Cristalino, seco, gélido y sofisticado. Servido a -10°C.',
+        ingredients: [
+          '60 ml Gin London Dry premium',
+          '10 ml Vermut seco francés (Noilly Prat)',
+          'Gotas de bitter de naranja (opcional)',
+          'Aceituna verde rellena sevillana'
+        ],
+        notes: 'Refrescado con hielo macizo durante 40 segundos, nunca batido, para preservar su transparencia cristalina.'
+      },
+      'citrus': {
+        name: 'Mocktail Citrus Paradise',
+        price: '$3.400',
+        badge: 'Sin Alcohol',
+        category: 'sin-alcohol',
+        image: 'https://images.unsplash.com/photo-1536935338788-846bb9981813?auto=format&fit=crop&w=700&q=80',
+        glass: 'Copa Balón con Hielo Esférico',
+        alcohol: '0.0° GL (Apto todo público)',
+        desc: 'Cóctel botánico sin alcohol elaborado a partir de cítricos frescos, pulpa de maracuyá y agua tónica artesanal.',
+        ingredients: [
+          '60 ml Jugo de pomelo rosado exprimido',
+          '30 ml Pulpa de maracuyá natural',
+          '15 ml Jarabe de agave',
+          'Completar con agua tónica botánica',
+          'Ramillete de romero fresco flameado'
+        ],
+        notes: 'El romero quemado desprende aceites esenciales que aportan una experiencia aromática envolvente.'
+      },
+      'malbec': {
+        name: 'Malbec Gran Reserva (Copa)',
+        price: '$4.900',
+        badge: 'Vinos',
+        category: 'vinos',
+        image: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&w=700&q=80',
+        glass: 'Copa Riedel Burdeos',
+        alcohol: '14.5° GL',
+        desc: 'Etiqueta seleccionada del Valle de Uco, Mendoza. Criado 14 meses en barricas de roble francés de primer uso.',
+        ingredients: [
+          '150 ml Vino tinto 100% Malbec',
+          'Servido a temperatura de cava (16°C a 18°C)',
+          'Oxigenación previa en decantador'
+        ],
+        notes: 'Gran volumen en boca, taninos sedosos y notas aromáticas a ciruelas negras, tabaco y vainilla.'
+      }
+    };
+
+    let currentSelectedDrinkForRating = '';
+
+    // --------------------------------------------------------------------------
+    // ENRUTADOR SPA (CAMBIO DE SECCIÓN SIN RECARGA)
+    // --------------------------------------------------------------------------
+    function navigateTo(sectionId) {
+      const sections = ['inicio', 'catalogo', 'formulario'];
+      
+      sections.forEach(sec => {
+        const secEl = document.getElementById(`sec-${sec}`);
+        const navBtn = document.getElementById(`nav-${sec}`);
+        const mobileNavBtn = document.getElementById(`mobile-nav-${sec}`);
+        
+        if (sec === sectionId) {
+          secEl.classList.remove('hidden');
+          secEl.classList.add('animate-fade-in');
+          
+          // Estilo botón activo en desktop
+          if (navBtn) {
+            navBtn.classList.remove('text-[#5C3A41]', 'dark:text-[#D8C3A5]');
+            navBtn.classList.add('bg-[#C9A24D]', 'text-[#241417]', 'shadow-sm');
+          }
+          // Estilo botón activo en móvil
+          if (mobileNavBtn) {
+            mobileNavBtn.classList.remove('text-[#5C3A41]', 'dark:text-[#D8C3A5]', 'hover:bg-black/5', 'dark:hover:bg-white/5');
+            mobileNavBtn.classList.add('bg-[#C9A24D]', 'text-[#241417]');
+          }
+        } else {
+          secEl.classList.add('hidden');
+          secEl.classList.remove('animate-fade-in');
+          
+          // Estilo botón inactivo en desktop
+          if (navBtn) {
+            navBtn.classList.remove('bg-[#C9A24D]', 'text-[#241417]', 'shadow-sm');
+            navBtn.classList.add('text-[#5C3A41]', 'dark:text-[#D8C3A5]');
+          }
+          // Estilo botón inactivo en móvil
+          if (mobileNavBtn) {
+            mobileNavBtn.classList.remove('bg-[#C9A24D]', 'text-[#241417]');
+            mobileNavBtn.classList.add('text-[#5C3A41]', 'dark:text-[#D8C3A5]', 'hover:bg-black/5', 'dark:hover:bg-white/5');
+          }
+        }
+      });
+
+      // Desplazar suavemente arriba
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // --------------------------------------------------------------------------
+    // MENÚ HAMBURGUESA MÓVIL
+    // --------------------------------------------------------------------------
+    function toggleMobileMenu() {
+      const drawer = document.getElementById('mobile-drawer');
+      const btn = document.getElementById('mobile-menu-btn');
+      const hamburgerIcon = document.getElementById('hamburger-icon');
+      const closeIcon = document.getElementById('close-icon');
+
+      const isHidden = drawer.classList.contains('hidden');
+
+      if (isHidden) {
+        drawer.classList.remove('hidden');
+        hamburgerIcon.classList.add('hidden');
+        closeIcon.classList.remove('hidden');
+        btn.setAttribute('aria-expanded', 'true');
+      } else {
+        drawer.classList.add('hidden');
+        hamburgerIcon.classList.remove('hidden');
+        closeIcon.classList.add('hidden');
+        btn.setAttribute('aria-expanded', 'false');
+      }
+    }
+
+    // --------------------------------------------------------------------------
+    // CONMUTADOR DE TEMA (CLARO / OSCURO)
+    // --------------------------------------------------------------------------
+    function toggleTheme() {
+      const html = document.documentElement;
+      if (html.classList.contains('dark')) {
+        html.classList.remove('dark');
+        localStorage.setItem('classic_bar_theme', 'light');
+      } else {
+        html.classList.add('dark');
+        localStorage.setItem('classic_bar_theme', 'dark');
+      }
+    }
+
+    function initTheme() {
+      const savedTheme = localStorage.getItem('classic_bar_theme');
+      if (savedTheme === 'light') {
+        document.documentElement.classList.remove('dark');
+      } else {
+        document.documentElement.classList.add('dark');
+      }
+    }
+
+    // --------------------------------------------------------------------------
+    // FILTRADO REACTIVO DEL CATÁLOGO
+    // --------------------------------------------------------------------------
+    function filterCategory(category) {
+      const buttons = document.querySelectorAll('.filter-btn');
+      buttons.forEach(btn => {
+        if (btn.getAttribute('data-category') === category) {
+          btn.classList.remove('border-black/10', 'dark:border-[#C9A24D]/30', 'text-[#5C3A41]', 'dark:text-[#D8C3A5]');
+          btn.classList.add('bg-[#C9A24D]', 'text-[#241417]', 'border-[#C9A24D]', 'shadow-sm');
+        } else {
+          btn.classList.remove('bg-[#C9A24D]', 'text-[#241417]', 'border-[#C9A24D]', 'shadow-sm');
+          btn.classList.add('border-black/10', 'dark:border-[#C9A24D]/30', 'text-[#5C3A41]', 'dark:text-[#D8C3A5]');
+        }
+      });
+
+      const cards = document.querySelectorAll('.drink-card');
+      let visibleCount = 0;
+
+      cards.forEach(card => {
+        const cardCat = card.getAttribute('data-category');
+        if (category === 'todos' || cardCat === category) {
+          card.classList.remove('hidden');
+          card.classList.add('animate-fade-in');
+          visibleCount++;
+        } else {
+          card.classList.add('hidden');
+          card.classList.remove('animate-fade-in');
+        }
+      });
+
+      const emptyState = document.getElementById('empty-state');
+      if (visibleCount === 0) {
+        emptyState.classList.remove('hidden');
+      } else {
+        emptyState.classList.add('hidden');
+      }
+    }
+
+    // --------------------------------------------------------------------------
+    // MODAL INTERACTIVO DE DETALLES
+    // --------------------------------------------------------------------------
+    function openDrinkModal(drinkId) {
+      const data = DRINKS_DATA[drinkId];
+      if (!data) return;
+
+      currentSelectedDrinkForRating = data.name;
+
+      document.getElementById('modal-img').src = data.image;
+      document.getElementById('modal-img').alt = `Detalle del cóctel ${data.name}`;
+      document.getElementById('modal-title').textContent = data.name;
+      document.getElementById('modal-badge').textContent = data.badge;
+      document.getElementById('modal-price').textContent = data.price;
+      document.getElementById('modal-desc').textContent = data.desc;
+      document.getElementById('modal-glass').textContent = data.glass;
+      document.getElementById('modal-alcohol').textContent = data.alcohol;
+      document.getElementById('modal-notes').textContent = `"${data.notes}"`;
+
+      // Render ingredientes
+      const ingList = document.getElementById('modal-ingredients');
+      ingList.innerHTML = '';
+      data.ingredients.forEach(item => {
+        const li = document.createElement('li');
+        li.textContent = item;
+        ingList.appendChild(li);
+      });
+
+      const modal = document.getElementById('drink-modal');
+      modal.classList.remove('hidden');
+      document.body.style.overflow = 'hidden'; // evitar scroll de fondo
+    }
+
+    function closeDrinkModal() {
+      const modal = document.getElementById('drink-modal');
+      modal.classList.add('hidden');
+      document.body.style.overflow = '';
+    }
+
+    function rateFromModal() {
+      closeDrinkModal();
+      navigateTo('formulario');
+      if (currentSelectedDrinkForRating) {
+        const select = document.getElementById('form-drink');
+        select.value = currentSelectedDrinkForRating;
+      }
+    }
+
+    // Cerrar modal al hacer clic en el backdrop o presionar ESC
+    window.addEventListener('click', (e) => {
+      const modal = document.getElementById('drink-modal');
+      if (e.target === modal) {
+        closeDrinkModal();
+      }
+    });
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeDrinkModal();
+      }
+    });
+
+    // --------------------------------------------------------------------------
+    // GESTIÓN DEL FORMULARIO Y CALIFICACIÓN (1 AL 10)
+    // --------------------------------------------------------------------------
+    function selectScore(num) {
+      document.getElementById('form-score-value').value = num;
+      document.getElementById('score-display').textContent = `Seleccionado: ${num}/10`;
+
+      const buttons = document.querySelectorAll('.score-btn');
+      buttons.forEach(btn => {
+        const val = parseInt(btn.getAttribute('data-val'), 10);
+        if (val === num) {
+          btn.classList.remove('border-black/15', 'dark:border-[#C9A24D]/30', 'text-[#5C3A41]', 'dark:text-[#D8C3A5]');
+          btn.classList.add('border-[#C9A24D]', 'bg-[#C9A24D]', 'text-[#241417]', 'shadow-sm');
+        } else {
+          btn.classList.remove('border-[#C9A24D]', 'bg-[#C9A24D]', 'text-[#241417]', 'shadow-sm');
+          btn.classList.add('border-black/15', 'dark:border-[#C9A24D]/30', 'text-[#5C3A41]', 'dark:text-[#D8C3A5]');
+        }
+      });
+    }
+
+    function handleFormSubmit(e) {
+      e.preventDefault();
+
+      const drinkSelect = document.getElementById('form-drink');
+      const errorMsg = document.getElementById('form-error-msg');
+      const successBanner = document.getElementById('form-success-banner');
+      const submitBtn = document.getElementById('btn-submit');
+      const submitBtnText = document.getElementById('btn-submit-text');
+      const checkmark = document.getElementById('submit-checkmark');
+
+      // Validación
+      if (!drinkSelect.value) {
+        errorMsg.classList.remove('hidden');
+        drinkSelect.focus();
+        return;
+      }
+
+      errorMsg.classList.add('hidden');
+
+      // Microinteracción de éxito solicitada:
+      // Botón pintado completo de verde, cambia a "¡Enviado!" y tilde animado a la derecha
+      submitBtn.classList.remove('bg-gradient-to-r', 'from-[#C9A24D]', 'to-[#DDB763]', 'text-[#241417]');
+      submitBtn.classList.add('bg-emerald-600', 'text-white');
+      submitBtnText.textContent = '✓ Enviado';
+      submitBtn.disabled = true;
+
+      // Mostrar tilde a la derecha
+      checkmark.classList.remove('hidden');
+
+      // Mostrar aviso verde de éxito
+      successBanner.classList.remove('hidden');
+
+      // Restauración limpia del formulario después de 4 segundos para permitir enviar otra reseña
+      setTimeout(() => {
+        drinkSelect.selectedIndex = 0;
+        document.getElementById('form-notes').value = '';
+        document.getElementById('form-name').value = '';
+        selectScore(10);
+
+        submitBtn.classList.remove('bg-emerald-600', 'text-white');
+        submitBtn.classList.add('bg-gradient-to-r', 'from-[#C9A24D]', 'to-[#DDB763]', 'text-[#241417]');
+        submitBtnText.textContent = 'Enviar otra Calificación';
+        submitBtn.disabled = false;
+        checkmark.classList.add('hidden');
+      }, 4000);
+    }
+
+    // Inicializar tema al cargar la página
+    initTheme();
+  </script>
+
+</body>
+</html>

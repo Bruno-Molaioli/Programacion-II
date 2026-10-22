@@ -1,0 +1,11 @@
+# Repositorio del equipo (gestionado por separado)
+EFI-Equipo/
+
+# Configuraciones y skills internas del asistente Antigravity
+.agents/
+**/.agents/
+
+# Temporales y sistema
+*.tmp
+.DS_Store
+Thumbs.db
